@@ -19,9 +19,10 @@ const Products = () => {
             searchQuery,
             selectedBrand,
             selectedCategory,
-            selectedPriceRange
+            selectedPriceRange,
+            sortOption
         }).toString();
-    
+
         fetch(`http://localhost:3000/products?${queryParams}`)
             .then((res) => res.json())
             .then((data) => {
@@ -29,8 +30,8 @@ const Products = () => {
                 setTotalPages(data.totalPages);
             })
             .catch((error) => console.error("Error fetching products:", error));
-    }, [currentPage, searchQuery, selectedBrand, selectedCategory, selectedPriceRange]);
-    
+    }, [currentPage, searchQuery, selectedBrand, selectedCategory, selectedPriceRange, sortOption]);
+
 
     const handleSearch = (event) => {
         setSearchQuery(event.target.value);
@@ -49,6 +50,11 @@ const Products = () => {
 
     const handlePriceRangeChange = (event) => {
         setSelectedPriceRange(event.target.value);
+        setCurrentPage(1);
+    };
+
+    const handleSortChange = (event) => {
+        setSortOption(event.target.value);
         setCurrentPage(1);
     };
 
@@ -127,6 +133,12 @@ const Products = () => {
                         <option value="1001-1500">$1001 - $1500</option>
                         <option value="1501-2000">$1501 - $2000</option>
                         <option value="2000+">$2000+</option>
+                    </select>
+                    <select value={sortOption} onChange={handleSortChange} className="select select-bordered">
+                        <option value="">Sort By</option>
+                        <option value="price-asc">Price: Low to High</option>
+                        <option value="price-desc">Price: High to Low</option>
+                        <option value="date-desc">Date Added: Newest First</option>
                     </select>
                 </div>
             </div>
