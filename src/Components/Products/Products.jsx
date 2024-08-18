@@ -12,14 +12,24 @@ const Products = () => {
     const productsPerPage = 10;
 
     useEffect(() => {
-        fetch(`http://localhost:3000/products?page=${currentPage}&limit=${productsPerPage}`)
+        const queryParams = new URLSearchParams({
+            page: currentPage,
+            limit: productsPerPage,
+            searchQuery,
+            selectedBrand,
+            selectedCategory,
+            selectedPriceRange
+        }).toString();
+    
+        fetch(`http://localhost:3000/products?${queryParams}`)
             .then((res) => res.json())
             .then((data) => {
                 setProducts(data.products);
                 setTotalPages(data.totalPages);
             })
             .catch((error) => console.error("Error fetching products:", error));
-    }, [currentPage]);
+    }, [currentPage, searchQuery, selectedBrand, selectedCategory, selectedPriceRange]);
+    
 
     const handleSearch = (event) => {
         setSearchQuery(event.target.value);
