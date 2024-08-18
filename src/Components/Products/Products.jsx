@@ -145,6 +145,7 @@ const Products = () => {
                             <p className="text-lg font-bold">${product.price}</p>
                             <p>Category: {product.category}</p>
                             <p>Rating: {product.ratings}⭐</p>
+                            <p><span className='font-semibold'>Production:</span> {product.createdAt}</p>
                         </div>
                     </div>
                 ))}

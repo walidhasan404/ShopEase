@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import { AuthContext } from '../../Providers/AuthProviders';
-import Navbar from '../Navbar/Navbar';
 import { Link } from 'react-router-dom';
 
 const Profile = () => {
