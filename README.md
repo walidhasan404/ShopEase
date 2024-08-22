@@ -1,3 +1,5 @@
+# Live_Site: https://auth-context-68bf1.web.app
+
 # ShopEase
 
 ShopEase is a single-page e-commerce web application that allows users to search, filter, and view a wide variety of products. The app includes pagination to navigate through multiple pages of products, with filters for brand, category, and price range.
