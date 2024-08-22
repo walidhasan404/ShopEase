@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { FaSearch } from 'react-icons/fa';
 
 const Products = () => {
     const [products, setProducts] = useState([]);
@@ -10,6 +11,7 @@ const Products = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [loading, setLoading] = useState(false);
+    const [isSearchVisible, setIsSearchVisible] = useState(false);
     const [error, setError] = useState(null);
     const productsPerPage = 12;
 
@@ -55,6 +57,10 @@ const Products = () => {
     const handleCategoryChange = (event) => {
         setSelectedCategory(event.target.value);
         setCurrentPage(1);
+    };
+
+    const toggleSearchVisibility = () => {
+        setIsSearchVisible(!isSearchVisible);
     };
 
     const handlePriceRangeChange = (event) => {
@@ -110,8 +116,11 @@ const Products = () => {
                         value={searchQuery}
                         onChange={handleSearch}
                         placeholder="Search for products..."
-                        className="input input-bordered w-full max-w-xs mb-2"
+                        className={`input input-bordered w-full max-w-xs mb-2 ${isSearchVisible ? 'block' : 'hidden'} lg:block`}
                     />
+                    <div className="lg:hidden" onClick={toggleSearchVisibility}>
+                        <FaSearch className="text-2xl mt-2 cursor-pointer" />
+                    </div>
                 </div>
                 <div className='flex flex-col md:flex-row lg:flex-row gap-2'>
                     <select value={selectedBrand} onChange={handleBrandChange} className="select select-bordered">
