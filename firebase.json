@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "auth-context-68bf1",
     "public": "dist",
     "ignore": [
       "firebase.json",

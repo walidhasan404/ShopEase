@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { BiSearch } from 'react-icons/bi';
 
 const Products = () => {
     const [products, setProducts] = useState([]);
@@ -10,9 +9,15 @@ const Products = () => {
     const [sortOption, setSortOption] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const productsPerPage = 10;
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const productsPerPage = 12;
 
     useEffect(() => {
+
+        setLoading(true);
+        setError(null);
+
         const queryParams = new URLSearchParams({
             page: currentPage,
             limit: productsPerPage,
@@ -23,13 +28,17 @@ const Products = () => {
             sortOption
         }).toString();
 
-        fetch(`http://localhost:3000/products?${queryParams}`)
+        fetch(`https://shopease-server-side.vercel.app/products?${queryParams}`)
             .then((res) => res.json())
             .then((data) => {
                 setProducts(data.products);
                 setTotalPages(data.totalPages);
-            })
-            .catch((error) => console.error("Error fetching products:", error));
+                setLoading(false);
+            }).catch((error) => {
+                console.error("Error fetching products:", error)
+                setError("Failed to load products. Please try again later.");
+                setLoading(false);
+            });
     }, [currentPage, searchQuery, selectedBrand, selectedCategory, selectedPriceRange, sortOption]);
 
 
@@ -93,19 +102,18 @@ const Products = () => {
 
     return (
         <div>
-            <h3 className="text-center mb-6 font-bold text-2xl">All Products</h3>
-            <div className='px-6 flex lg:justify-between gap-4'>
+            <h3 className="text-center mb-6 font-bold text-3xl">All Products</h3>
+            <div className='px-6 lg:px-0 flex justify-between lg:justify-between gap-4'>
                 <div className='flex gap-1'>
                     <input
-                        type="text"
+                        type="search"
                         value={searchQuery}
                         onChange={handleSearch}
                         placeholder="Search for products..."
                         className="input input-bordered w-full max-w-xs mb-2"
                     />
-                    <button className='btn'><BiSearch /></button>
                 </div>
-                <div className='flex gap-2'>
+                <div className='flex flex-col md:flex-row lg:flex-row gap-2'>
                     <select value={selectedBrand} onChange={handleBrandChange} className="select select-bordered">
                         <option value="">All Brands</option>
                         <option value="Samsung">Samsung</option>
@@ -126,6 +134,8 @@ const Products = () => {
                         <option value="Desktops">Desktops</option>
                         <option value="Outdoor & Sports">Sports</option>
                     </select>
+                </div>
+                <div className='flex flex-col md:flex-row lg:flex-row gap-2'>
                     <select value={selectedPriceRange} onChange={handlePriceRangeChange} className="select select-bordered">
                         <option value="">All Price Ranges</option>
                         <option value="0-500">$0 - $500</option>
@@ -134,7 +144,7 @@ const Products = () => {
                         <option value="1501-2000">$1501 - $2000</option>
                         <option value="2000+">$2000+</option>
                     </select>
-                    <select value={sortOption} onChange={handleSortChange} className="select select-bordered">
+                    <select value={sortOption} onChange={handleSortChange} className="select w-40 select-bordered">
                         <option value="">Sort By</option>
                         <option value="price-asc">Price: Low to High</option>
                         <option value="price-desc">Price: High to Low</option>
@@ -144,7 +154,7 @@ const Products = () => {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 px-6">
                 {filteredProducts.map((product) => (
-                    <div key={product._id} className="card bg-base-100 w-96 shadow-xl">
+                    <div key={product._id} className="card bg-base-100 lg:w-96 md:w-96 w-full shadow-xl">
                         <figure className="px-10 pt-10">
                             <img
                                 src={product.productImage}
